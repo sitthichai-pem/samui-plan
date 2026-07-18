@@ -127,61 +127,97 @@ PAGE_TEMPLATE = r"""
 <title>{{ trip.name }} — วางแพลนเที่ยว</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --paper:#F2EDE1; --paper-2:#E9E1CF; --teal:#1B4B43; --teal-deep:#123530;
-    --teal-light:#CBE0DA; --mustard:#E3A72C; --coral:#D6572A; --ink:#232323; --white:#FFFFFF;
+    --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#F1F3F6;
+    --border:#E5E7EB; --text:#0F172A; --text-muted:#64748B;
+    --accent:#4F46E5; --accent-soft:#EEF0FF;
+    --shadow-sm:0 1px 2px rgba(15,23,42,0.06);
+    --shadow-md:0 8px 24px rgba(15,23,42,0.10);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0B0F1A; --surface:#131826; --surface-2:#1B2233;
+      --border:#242C3E; --text:#E5E9F2; --text-muted:#8B93A7;
+      --accent:#818CF8; --accent-soft:#1E2340;
+      --shadow-sm:0 1px 2px rgba(0,0,0,0.35);
+      --shadow-md:0 8px 24px rgba(0,0,0,0.5);
+    }
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    font-family:Georgia,'Noto Serif Thai',serif; color:var(--ink); background:var(--paper);
-    background-image:radial-gradient(circle at 1px 1px, rgba(27,75,67,0.08) 1px, transparent 0);
-    background-size:22px 22px;
+    font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    color:var(--text); background:var(--bg); -webkit-font-smoothing:antialiased;
   }
-  .display{font-family:'Arial Black','Trebuchet MS',sans-serif;text-transform:uppercase;letter-spacing:0.02em;font-weight:900;}
   button{font-family:inherit;cursor:pointer;border:none;}
 
   .trip-header{
-    background:var(--teal);color:var(--white);padding:14px 20px;display:flex;align-items:center;gap:14px;
-    flex-wrap:wrap;position:sticky;top:0;z-index:500;border-bottom:3px solid var(--mustard);
+    background:var(--surface);color:var(--text);padding:14px 22px;display:flex;align-items:center;gap:12px;
+    flex-wrap:wrap;position:sticky;top:0;z-index:500;border-bottom:1px solid var(--border);box-shadow:var(--shadow-sm);
   }
   .trip-title-static{
-    color:var(--white);font-family:'Arial Black','Trebuchet MS',sans-serif;
-    text-transform:uppercase;font-size:20px;font-weight:900;letter-spacing:0.02em;padding:2px 4px;max-width:320px;
+    font-size:18px;font-weight:800;letter-spacing:-0.01em;max-width:360px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
   .header-spacer{flex:1;}
-  .icon-btn{background:rgba(255,255,255,0.12);color:var(--white);padding:7px 12px;border-radius:3px;font-size:13px;}
-  .icon-btn:hover{background:rgba(255,255,255,0.24);}
+  .icon-btn{
+    background:var(--surface-2);color:var(--text);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;
+    transition:background .15s ease, color .15s ease, transform .1s ease;
+  }
+  .icon-btn:hover{background:var(--accent-soft);color:var(--accent);}
+  .icon-btn:active{transform:scale(0.96);}
 
-  .trip-body{display:grid;grid-template-columns:340px 1fr;gap:0;min-height:calc(100vh - 62px);}
-  @media (max-width:860px){ .trip-body{grid-template-columns:1fr;} #map{height:340px !important;} }
-  .side-panel{background:var(--paper-2);border-right:2px solid var(--teal-light);padding:16px;overflow-y:auto;}
-  .day-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-  .day-tab{background:var(--white);border:1.5px solid var(--teal);color:var(--teal);padding:6px 12px;border-radius:20px;font-size:13px;font-weight:bold;position:relative;}
-  .day-tab.active{background:var(--teal);color:var(--white);}
-  .day-label-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-  .day-label-static{flex:1;font-size:16px;font-weight:bold;color:var(--teal-deep);padding:2px 0;}
-  .day-date-static{font-size:12px;opacity:0.65;}
+  .trip-body{display:grid;grid-template-columns:360px 1fr;gap:0;min-height:calc(100vh - 63px);}
+  @media (max-width:860px){ .trip-body{grid-template-columns:1fr;} #map{height:360px !important;} }
+  .side-panel{background:var(--bg);padding:20px;overflow-y:auto;}
+  .day-tabs{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:18px;background:var(--surface-2);padding:5px;border-radius:12px;}
+  .day-tab{
+    flex:1;min-width:64px;background:transparent;color:var(--text-muted);padding:8px 10px;border-radius:9px;
+    font-size:13px;font-weight:600;transition:background .15s ease,color .15s ease;
+  }
+  .day-tab.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm);}
+  .day-label-row{display:flex;align-items:baseline;gap:8px;margin-bottom:14px;}
+  .day-label-static{font-size:15px;font-weight:700;color:var(--text);}
+  .day-date-static{font-size:12.5px;color:var(--text-muted);}
   .place-list{list-style:none;margin:0;padding:0;}
-  .place-item{background:var(--white);border:1.5px solid var(--teal-light);border-left:5px solid var(--coral);border-radius:3px;padding:10px 12px;margin-bottom:8px;}
-  .place-top{display:flex;align-items:flex-start;gap:8px;}
-  .place-num{background:var(--coral);color:var(--white);width:22px;height:22px;border-radius:50%;font-size:12px;font-weight:bold;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+  .place-item{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow-sm);
+    transition:box-shadow .15s ease, transform .15s ease;
+  }
+  .place-item:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
+  .place-top{display:flex;align-items:flex-start;gap:10px;}
+  .place-num{
+    color:#fff;width:24px;height:24px;border-radius:8px;font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+  }
   .place-main{flex:1;min-width:0;}
-  .place-name{font-weight:bold;font-size:14px;color:var(--teal-deep);}
-  .place-time{font-size:12px;color:var(--coral);font-weight:bold;}
-  .place-note{font-size:12.5px;opacity:0.75;margin-top:2px;}
-  .empty-state{text-align:center;padding:30px 10px;color:var(--teal-deep);opacity:0.55;font-size:13.5px;}
+  .place-name{font-weight:600;font-size:14px;color:var(--text);line-height:1.35;}
+  .place-time{font-size:12px;color:var(--accent);font-weight:700;margin-top:2px;}
+  .place-note{font-size:12.5px;color:var(--text-muted);margin-top:3px;line-height:1.4;}
+  .empty-state{text-align:center;padding:36px 12px;color:var(--text-muted);font-size:13.5px;}
 
-  #map{height:calc(100vh - 62px);width:100%;}
-  .map-pin-dot{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--white);box-shadow:1px 1px 3px rgba(0,0,0,0.35);flex-shrink:0;}
-  .map-pin-connector{width:14px;height:2.5px;flex-shrink:0;}
-  .map-pin-card{background:var(--white);border:1.5px solid;border-left-width:5px;border-radius:4px;padding:4px 9px;box-shadow:2px 2px 5px rgba(0,0,0,0.22);max-width:158px;font-family:Georgia,'Noto Serif Thai',serif;}
-  .map-pin-card .pnum{font-weight:900;font-size:11px;margin-right:3px;}
-  .map-pin-card .pname{font-weight:bold;font-size:12px;color:var(--ink);line-height:1.25;display:inline;}
-  .map-pin-card .ptime{font-size:10.5px;font-weight:bold;margin-top:2px;}
+  #map{height:calc(100vh - 63px);width:100%;}
+  .map-pin-dot{width:16px;height:16px;border-radius:50%;border:3px solid var(--surface);box-shadow:var(--shadow-sm);flex-shrink:0;}
+  .map-pin-connector{width:12px;height:2px;flex-shrink:0;}
+  .map-pin-card{
+    background:var(--surface);border:1px solid var(--border);border-left-width:4px;border-radius:10px;
+    padding:5px 10px;box-shadow:var(--shadow-md);max-width:170px;font-family:'Inter',system-ui,sans-serif;
+  }
+  .map-pin-card .pnum{font-weight:800;font-size:11px;margin-right:4px;}
+  .map-pin-card .pname{font-weight:600;font-size:12px;color:var(--text);line-height:1.3;display:inline;}
+  .map-pin-card .ptime{font-size:10.5px;font-weight:700;margin-top:2px;}
 
-  .toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--teal-deep);color:var(--white);padding:10px 18px;border-radius:20px;font-size:13px;z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);
+    padding:11px 20px;border-radius:999px;font-size:13px;font-weight:500;z-index:2000;opacity:0;pointer-events:none;
+    transition:opacity .25s ease; box-shadow:var(--shadow-md);
+  }
   .toast.show{opacity:1;}
 </style>
 </head>
@@ -192,7 +228,7 @@ PAGE_TEMPLATE = r"""
 <script>
   let TRIP = {{ trip | tojson }};
 
-  const PALETTE = ['#D6572A','#1B4B43','#E3A72C','#5B7A8C','#8C5B7A','#4E7B3E'];
+  const PALETTE = ['#4F46E5','#F97316','#10B981','#EC4899','#0EA5E9','#EAB308'];
   const app = document.getElementById('app');
   const toastEl = document.getElementById('toast');
 
@@ -209,7 +245,7 @@ PAGE_TEMPLATE = r"""
     const trip = state.trip;
     app.innerHTML = `
       <div class="trip-header">
-        <div class="trip-title-static display">${escapeHtml(trip.name)}</div>
+        <div class="trip-title-static">${escapeHtml(trip.name)}</div>
         <div class="header-spacer"></div>
         <button class="icon-btn" id="btn-refresh">รีเฟรช</button>
         <button class="icon-btn" id="btn-share">แชร์ลิงก์</button>
