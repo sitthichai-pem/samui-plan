@@ -304,7 +304,12 @@ PAGE_TEMPLATE = r"""
   }
 
   let routeRequestId = 0;
-  function isFlightLeg(a,b){ return /เที่ยวบิน/.test(a.name); }
+  function isDirectLeg(a,b){
+    // เที่ยวบิน = leg starting at a flight pin is the flight itself (not a road)
+    // นั่งเรือ = leg arriving at a ferry-ride pin is the sea crossing (routing engines
+    // often snap it to the wrong ferry pier, so draw it direct instead)
+    return /เที่ยวบิน/.test(a.name) || /นั่งเรือ/.test(b.name);
+  }
 
   async function fetchRoadRoute(a, b){
     try{
@@ -335,12 +340,12 @@ PAGE_TEMPLATE = r"""
     const legs = [];
     for(let i=0;i<day.places.length-1;i++){ legs.push([day.places[i], day.places[i+1]]); }
     const paths = await Promise.all(legs.map(([a,b])=>
-      isFlightLeg(a,b) ? Promise.resolve([[a.lat,a.lng],[b.lat,b.lng]]) : fetchRoadRoute([a.lat,a.lng],[b.lat,b.lng])
+      isDirectLeg(a,b) ? Promise.resolve([[a.lat,a.lng],[b.lat,b.lng]]) : fetchRoadRoute([a.lat,a.lng],[b.lat,b.lng])
     ));
 
     if(myRequestId !== routeRequestId) return; // a newer day/refresh started, drop this stale result
     legs.forEach(([a,b], i)=>{
-      const dashed = isFlightLeg(a,b);
+      const dashed = isDirectLeg(a,b);
       L.polyline(paths[i], {color, weight: dashed?3:4, opacity:0.85, dashArray: dashed?'6 8':null}).addTo(state.routeLayer);
     });
   }
