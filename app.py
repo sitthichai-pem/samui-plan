@@ -30,7 +30,7 @@ _lock = threading.Lock()
 # ข้อมูลเริ่มต้นของทริป — แก้รหัสผ่านตรง "passcode" ก่อน deploy จริงด้วยนะ
 # ---------------------------------------------------------------------------
 DEFAULT_TRIP = {
-    "name": "สุราษฎร์ธานี และ เกาะสมุย",
+    "name": "ทริปเกาะสมุย <3",
     "passcode": "bestdream2312",
     "days": [
         {
@@ -321,7 +321,7 @@ PAGE_TEMPLATE = r"""
       <div class="trip-header">
         ${editing ? `<input class="trip-title-input display" id="trip-name-input" value="${escapeAttr(trip.name)}" />`
                   : `<div class="trip-title-static display">${escapeHtml(trip.name)}</div>`}
-        <div class="mode-badge ${editing?'edit':'view'}">${editing?'โหมดแก้ไข':'มุมมองผู้ชม'}</div>
+        ${editing ? `<div class="mode-badge edit">โหมดแก้ไข</div>` : ''}
         <div class="header-spacer"></div>
         <button class="icon-btn" id="btn-refresh">รีเฟรช</button>
         <button class="icon-btn" id="btn-share">แชร์ลิงก์</button>
