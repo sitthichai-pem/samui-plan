@@ -303,22 +303,46 @@ PAGE_TEMPLATE = r"""
     return L.divIcon({className:'', html, iconSize:[200,44], iconAnchor:[anchorX,22]});
   }
 
-  function updateMapMarkers(){
+  let routeRequestId = 0;
+  function isFlightLeg(a,b){ return /เที่ยวบิน/.test(a.name) || /เที่ยวบิน/.test(b.name); }
+
+  async function fetchRoadRoute(a, b){
+    try{
+      const url = `https://router.project-osrm.org/route/v1/driving/${a[1]},${a[0]};${b[1]},${b[0]}?overview=full&geometries=geojson`;
+      const r = await fetch(url);
+      const data = await r.json();
+      if(data.code === 'Ok' && data.routes && data.routes[0]){
+        return data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+      }
+    }catch(e){ /* fall back to straight line below */ }
+    return [a, b];
+  }
+
+  async function updateMapMarkers(){
     if(!state.map) return;
+    const myRequestId = ++routeRequestId;
     state.markersLayer.clearLayers(); state.routeLayer.clearLayers();
     const day = currentDay(); const dayIdx = day ? state.trip.days.indexOf(day) : 0; const color = dayColor(dayIdx);
+    if(!day) return;
 
-    if(day){
-      const latlngs = [];
-      day.places.forEach((p,i)=>{
-        latlngs.push([p.lat,p.lng]);
-        const side = i % 2 === 0 ? 'right' : 'left';
-        L.marker([p.lat,p.lng], {icon:labelIcon(color,i+1,p.name,p.time,side)})
-          .bindPopup(`<b>${escapeHtml(p.name)}</b>${p.time?`<br/>${escapeHtml(p.time)} น.`:''}${p.note?`<br/>${escapeHtml(p.note)}`:''}`)
-          .addTo(state.markersLayer);
-      });
-      if(latlngs.length>1){ L.polyline(latlngs, {color:color, weight:3, dashArray:'6 8', opacity:0.85}).addTo(state.routeLayer); }
-    }
+    day.places.forEach((p,i)=>{
+      const side = i % 2 === 0 ? 'right' : 'left';
+      L.marker([p.lat,p.lng], {icon:labelIcon(color,i+1,p.name,p.time,side)})
+        .bindPopup(`<b>${escapeHtml(p.name)}</b>${p.time?`<br/>${escapeHtml(p.time)} น.`:''}${p.note?`<br/>${escapeHtml(p.note)}`:''}`)
+        .addTo(state.markersLayer);
+    });
+
+    const legs = [];
+    for(let i=0;i<day.places.length-1;i++){ legs.push([day.places[i], day.places[i+1]]); }
+    const paths = await Promise.all(legs.map(([a,b])=>
+      isFlightLeg(a,b) ? Promise.resolve([[a.lat,a.lng],[b.lat,b.lng]]) : fetchRoadRoute([a.lat,a.lng],[b.lat,b.lng])
+    ));
+
+    if(myRequestId !== routeRequestId) return; // a newer day/refresh started, drop this stale result
+    legs.forEach(([a,b], i)=>{
+      const dashed = isFlightLeg(a,b);
+      L.polyline(paths[i], {color, weight: dashed?3:4, opacity:0.85, dashArray: dashed?'6 8':null}).addTo(state.routeLayer);
+    });
   }
 
   renderTrip();
