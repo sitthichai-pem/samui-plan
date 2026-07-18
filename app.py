@@ -304,7 +304,7 @@ PAGE_TEMPLATE = r"""
   }
 
   let routeRequestId = 0;
-  function isFlightLeg(a,b){ return /เที่ยวบิน/.test(a.name) || /เที่ยวบิน/.test(b.name); }
+  function isFlightLeg(a,b){ return /เที่ยวบิน/.test(a.name); }
 
   async function fetchRoadRoute(a, b){
     try{
