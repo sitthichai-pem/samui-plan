@@ -80,7 +80,7 @@ DEFAULT_TRIP = {
                 {
                     "id": "p3",
                     "name": "เช็คอิน COSI Samui Chaweng Beach",
-                    "lat": 9.5518, "lng": 100.0453,
+                    "lat": 9.5311554, "lng": 100.0578517,
                     "time": "15:00",
                     "note": "เกาะสมุย · 1 ห้อง"
                 }
@@ -96,7 +96,7 @@ DEFAULT_TRIP = {
                 {
                     "id": "p4",
                     "name": "เช็คเอาต์ COSI Samui Chaweng Beach",
-                    "lat": 9.5518, "lng": 100.0453,
+                    "lat": 9.5311554, "lng": 100.0578517,
                     "time": "12:00",
                     "note": ""
                 },
