@@ -234,6 +234,9 @@ PAGE_TEMPLATE = r"""
   let TRIP = {{ trip | tojson }};
 
   const PALETTE = ['#4F46E5','#F97316','#10B981','#EC4899','#0EA5E9','#EAB308'];
+  const RESTAURANT_COLOR = '#EF4444';
+  function isRestaurant(p){ return /กินข้าว/.test(p.name); }
+  function placeColor(p, dayIdx){ return isRestaurant(p) ? RESTAURANT_COLOR : dayColor(dayIdx); }
   const app = document.getElementById('app');
   const toastEl = document.getElementById('toast');
 
@@ -299,10 +302,11 @@ PAGE_TEMPLATE = r"""
       list.innerHTML = `<div class="empty-state">ยังไม่มีสถานที่ในวันนี้</div>`;
       return;
     }
+    const dayIdx = state.trip.days.indexOf(day);
     list.innerHTML = day.places.map((p,i)=>`
-      <li class="place-item" data-place="${p.id}" style="border-left-color:${dayColor(state.trip.days.indexOf(day))}">
+      <li class="place-item" data-place="${p.id}" style="border-left-color:${placeColor(p,dayIdx)}">
         <div class="place-top">
-          <div class="place-num" style="background:${dayColor(state.trip.days.indexOf(day))}">${i+1}</div>
+          <div class="place-num" style="background:${placeColor(p,dayIdx)}">${i+1}</div>
           <div class="place-main">
             <div class="place-name">${escapeHtml(p.name)}</div>
             ${p.time?`<div class="place-time">${escapeHtml(p.time)} น.</div>`:''}
@@ -371,11 +375,11 @@ PAGE_TEMPLATE = r"""
     const myRequestId = ++routeRequestId;
     state.markersLayer.clearLayers(); state.routeLayer.clearLayers();
     state.markersById = {};
-    const day = currentDay(); const dayIdx = day ? state.trip.days.indexOf(day) : 0; const color = dayColor(dayIdx);
+    const day = currentDay(); const dayIdx = day ? state.trip.days.indexOf(day) : 0;
     if(!day) return;
 
     day.places.forEach((p,i)=>{
-      const marker = L.marker([p.lat,p.lng], {icon:numberIcon(color,i+1)})
+      const marker = L.marker([p.lat,p.lng], {icon:numberIcon(placeColor(p,dayIdx),i+1)})
         .bindPopup(`<b>${escapeHtml(p.name)}</b>${p.time?`<br/>${escapeHtml(p.time)} น.`:''}${p.note?`<br/>${escapeHtml(p.note)}`:''}`)
         .addTo(state.markersLayer);
       state.markersById[p.id] = marker;
