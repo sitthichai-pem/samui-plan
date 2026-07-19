@@ -217,15 +217,6 @@ PAGE_TEMPLATE = r"""
   .empty-state{text-align:center;padding:36px 12px;color:var(--text-muted);font-size:13.5px;}
 
   #map{height:calc(100vh - 63px);width:100%;}
-  .map-pin-dot{width:16px;height:16px;border-radius:50%;border:3px solid var(--surface);box-shadow:var(--shadow-sm);flex-shrink:0;}
-  .map-pin-connector{width:12px;height:2px;flex-shrink:0;}
-  .map-pin-card{
-    background:var(--surface);border:1px solid var(--border);border-left-width:4px;border-radius:10px;
-    padding:5px 10px;box-shadow:var(--shadow-md);max-width:170px;font-family:'Inter',system-ui,sans-serif;
-  }
-  .map-pin-card .pnum{font-weight:800;font-size:11px;margin-right:4px;}
-  .map-pin-card .pname{font-weight:600;font-size:12px;color:var(--text);line-height:1.3;display:inline;}
-  .map-pin-card .ptime{font-size:10.5px;font-weight:700;margin-top:2px;}
 
   .toast{
     position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);
@@ -348,23 +339,11 @@ PAGE_TEMPLATE = r"""
     }
   }
 
-  function labelIcon(color, num, name, time, side){
-    const shortName = name.length > 30 ? name.slice(0,29)+'…' : name;
-    const cardHtml = `<div class="map-pin-card" style="border-color:${color}">
-        <span class="pnum" style="color:${color}">${num}</span><span class="pname">${escapeHtml(shortName)}</span>
-        ${time?`<div class="ptime" style="color:${color}">${escapeHtml(time)} น.</div>`:''}
-      </div>`;
-    const dotHtml = `<div class="map-pin-dot" style="background:${color}"></div>`;
-    const connectorHtml = `<div class="map-pin-connector" style="background:${color}"></div>`;
-    let html, anchorX;
-    if(side==='left'){
-      html = `<div style="display:flex;align-items:center;justify-content:flex-end;height:44px;">${cardHtml}${connectorHtml}${dotHtml}</div>`;
-      anchorX = 191;
-    } else {
-      html = `<div style="display:flex;align-items:center;height:44px;">${dotHtml}${connectorHtml}${cardHtml}</div>`;
-      anchorX = 9;
-    }
-    return L.divIcon({className:'', html, iconSize:[200,44], iconAnchor:[anchorX,22]});
+  function numberIcon(color, num){
+    const html = `<div style="background:${color};color:#fff;width:28px;height:28px;border-radius:50%;
+      border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.28);display:flex;align-items:center;
+      justify-content:center;font-family:'Inter',system-ui,sans-serif;font-size:13px;font-weight:700;">${num}</div>`;
+    return L.divIcon({className:'', html, iconSize:[28,28], iconAnchor:[14,14]});
   }
 
   let routeRequestId = 0;
@@ -396,8 +375,7 @@ PAGE_TEMPLATE = r"""
     if(!day) return;
 
     day.places.forEach((p,i)=>{
-      const side = i % 2 === 0 ? 'right' : 'left';
-      const marker = L.marker([p.lat,p.lng], {icon:labelIcon(color,i+1,p.name,p.time,side)})
+      const marker = L.marker([p.lat,p.lng], {icon:numberIcon(color,i+1)})
         .bindPopup(`<b>${escapeHtml(p.name)}</b>${p.time?`<br/>${escapeHtml(p.time)} น.`:''}${p.note?`<br/>${escapeHtml(p.note)}`:''}`)
         .addTo(state.markersLayer);
       state.markersById[p.id] = marker;
