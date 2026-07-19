@@ -154,6 +154,8 @@ PAGE_TEMPLATE = r"""
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>{{ trip.name }} — วางแพลนเที่ยว</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏝️</text></svg>" />
+<meta name="theme-color" content="#4F46E5" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -220,6 +222,7 @@ PAGE_TEMPLATE = r"""
     transition:box-shadow .15s ease, transform .15s ease;
   }
   .place-item:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
+  .place-item.active{box-shadow:0 0 0 2px var(--accent), var(--shadow-md);}
   .place-top{display:flex;align-items:flex-start;gap:10px;}
   .place-num{
     color:#fff;width:24px;height:24px;border-radius:8px;font-size:12px;font-weight:700;
@@ -352,6 +355,9 @@ PAGE_TEMPLATE = r"""
     state.map.flyTo([p.lat,p.lng], Math.max(state.map.getZoom(),15), {duration:0.6});
     const marker = state.markersById[placeId];
     if(marker) marker.openPopup();
+    document.querySelectorAll('.place-item').forEach(li=>{
+      li.classList.toggle('active', li.dataset.place === placeId);
+    });
   }
 
   function initMapIfNeeded(){
@@ -385,13 +391,18 @@ PAGE_TEMPLATE = r"""
     return /เที่ยวบิน/.test(a.name) || /นั่งเรือ/.test(b.name);
   }
 
+  const routeCache = {};
   async function fetchRoadRoute(a, b){
+    const key = `${a[0]},${a[1]}|${b[0]},${b[1]}`;
+    if(routeCache[key]) return routeCache[key];
     try{
       const url = `https://router.project-osrm.org/route/v1/driving/${a[1]},${a[0]};${b[1]},${b[0]}?overview=full&geometries=geojson`;
       const r = await fetch(url);
       const data = await r.json();
       if(data.code === 'Ok' && data.routes && data.routes[0]){
-        return data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+        const path = data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+        routeCache[key] = path;
+        return path;
       }
     }catch(e){ /* fall back to straight line below */ }
     return [a, b];
