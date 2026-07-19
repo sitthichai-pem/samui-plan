@@ -346,7 +346,28 @@ PAGE_TEMPLATE = r"""
     }).addTo(state.map);
     state.markersLayer = L.layerGroup().addTo(state.map);
     state.routeLayer = L.layerGroup().addTo(state.map);
+    addOverviewControl();
     fitMapToDay();
+  }
+
+  function addOverviewControl(){
+    const OverviewControl = L.Control.extend({
+      options:{ position:'topleft' },
+      onAdd: function(){
+        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+        const link = L.DomUtil.create('a', '', container);
+        link.href = '#';
+        link.title = 'ดูภาพรวมทั้งวัน';
+        link.style.display = 'flex';
+        link.style.alignItems = 'center';
+        link.style.justifyContent = 'center';
+        link.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>`;
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.on(link, 'click', L.DomEvent.stop).on(link, 'click', ()=> fitMapToDay());
+        return container;
+      }
+    });
+    new OverviewControl().addTo(state.map);
   }
 
   function fitMapToDay(){
