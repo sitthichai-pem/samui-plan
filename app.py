@@ -335,7 +335,10 @@ PAGE_TEMPLATE = r"""
   function initMapIfNeeded(){
     if(state.map){ state.map.remove(); state.map = null; }
     state.map = L.map('map', {zoomControl:true}).setView([13.7563,100.5018], 11);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:19, attribution:'&copy; OpenStreetMap contributors'}).addTo(state.map);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom:19, subdomains:'abcd',
+      attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
+    }).addTo(state.map);
     state.markersLayer = L.layerGroup().addTo(state.map);
     state.routeLayer = L.layerGroup().addTo(state.map);
     const allPlaces = state.trip.days.flatMap(d=>d.places);
