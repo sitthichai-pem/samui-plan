@@ -33,63 +33,72 @@ DEFAULT_TRIP = {
                     "name": "คอนโด The President สาทร-ราชพฤกษ์ เฟส 3",
                     "lat": 13.7185, "lng": 100.4570,
                     "time": "05:00",
-                    "note": "จุดเริ่มต้นเดินทาง"
+                    "note": "จุดเริ่มต้นเดินทาง",
+                    "category": "travel"
                 },
                 {
                     "id": "p2",
                     "name": "เที่ยวบิน FD 3235 · ดอนเมือง (DMK) → สุราษฎร์ธานี (URT)",
                     "lat": 13.9126, "lng": 100.6068,
                     "time": "07:00",
-                    "note": "AirAsia · ถึง 08:15 น. (1 ชม. 15 น.) · ผู้โดยสาร 2 คน"
+                    "note": "AirAsia · ถึง 08:15 น. (1 ชม. 15 น.) · ผู้โดยสาร 2 คน",
+                    "category": "travel"
                 },
                 {
                     "id": "p6",
                     "name": "ถึงสนามบินสุราษฎร์ธานี (URT)",
                     "lat": 9.1342, "lng": 99.1354,
                     "time": "08:15",
-                    "note": "ลงเครื่องแล้ว"
+                    "note": "ลงเครื่องแล้ว",
+                    "category": "travel"
                 },
                 {
                     "id": "p7",
                     "name": "นั่งรถไปท่าเรือดอนสัก",
                     "lat": 9.3167829, "lng": 99.7246064,
                     "time": "10:30",
-                    "note": "ใช้เวลาประมาณ 1 ชม. 30 นาที"
+                    "note": "ใช้เวลาประมาณ 1 ชม. 30 นาที",
+                    "category": "travel"
                 },
                 {
                     "id": "p8",
                     "name": "นั่งเรือไปท่าเรือหน้าทอน เกาะสมุย",
                     "lat": 9.536353, "lng": 99.9331332,
                     "time": "12:00",
-                    "note": "เรือเฟอร์รี่ ใช้เวลาประมาณ 1 ชม. 30 นาที"
+                    "note": "เรือเฟอร์รี่ ใช้เวลาประมาณ 1 ชม. 30 นาที",
+                    "category": "travel"
                 },
                 {
                     "id": "p10",
                     "name": "กินข้าวที่ร้านกะปิ สะตอ",
                     "lat": 9.5358252, "lng": 100.0364703,
                     "time": "13:00",
-                    "note": "มื้อกลางวัน อาหารใต้"
+                    "note": "มื้อกลางวัน อาหารใต้",
+                    "category": "food"
                 },
                 {
                     "id": "p11",
                     "name": "เดินเล่นที่เซ็นทรัล สมุย",
                     "lat": 9.5326483, "lng": 100.0618091,
                     "time": "14:30",
-                    "note": "เดินเล่น รอเวลาเช็คอิน"
+                    "note": "เดินเล่น รอเวลาเช็คอิน",
+                    "category": "activity"
                 },
                 {
                     "id": "p3",
                     "name": "เช็คอิน COSI Samui Chaweng Beach",
                     "lat": 9.5311554, "lng": 100.0578517,
                     "time": "15:00",
-                    "note": "เกาะสมุย · 1 ห้อง"
+                    "note": "เกาะสมุย · 1 ห้อง",
+                    "category": "travel"
                 },
                 {
                     "id": "p12",
                     "name": "กินข้าวและดูไฟที่ Coco Tam",
                     "lat": 9.5598146, "lng": 100.0263889,
                     "time": "17:30",
-                    "note": "บาร์ริมหาดบ่อผุด มื้อเย็น + ดูไฟโชว์"
+                    "note": "บาร์ริมหาดบ่อผุด มื้อเย็น + ดูไฟโชว์",
+                    "category": "food"
                 }
             ]
         },
@@ -105,19 +114,25 @@ DEFAULT_TRIP = {
                     "name": "เช็คเอาต์ COSI Samui Chaweng Beach",
                     "lat": 9.5311554, "lng": 100.0578517,
                     "time": "12:00",
-                    "note": ""
+                    "note": "",
+                    "category": "travel"
                 },
                 {
                     "id": "p5",
                     "name": "เที่ยวบิน DD 575 · สุราษฎร์ธานี (URT) → ดอนเมือง (DMK)",
                     "lat": 9.1342, "lng": 99.1354,
                     "time": "15:20",
-                    "note": "Nok Air · ถึง 16:35 น. (1 ชม. 15 น.) · ผู้โดยสาร 2 คน"
+                    "note": "Nok Air · ถึง 16:35 น. (1 ชม. 15 น.) · ผู้โดยสาร 2 คน",
+                    "category": "travel"
                 }
             ]
         }
     ]
 }
+# category ของแต่ละจุด กำหนดสีหมุด/เลขบนแผนที่และแท็บซ้าย:
+#   "food"     = สีแดง   (ร้านอาหาร ร้านกาแฟ คาเฟ่)
+#   "activity" = สีเหลือง (กิจกรรม เช่น เดินเล่น ช้อปปิ้ง เที่ยวชม)
+#   "travel"   = สีตามวัน (เดินทาง เช็คอิน/เอาต์ หรืออื่นๆ ที่ไม่เข้าสองอย่างข้างบน)
 
 
 # ---------------------------------------------------------------------------
@@ -236,11 +251,17 @@ PAGE_TEMPLATE = r"""
   const PALETTE = ['#4F46E5','#F97316','#10B981','#EC4899','#0EA5E9','#EAB308'];
   const RESTAURANT_COLOR = '#EF4444';
   const ACTIVITY_COLOR = '#EAB308';
-  function isRestaurant(p){ return /กินข้าว/.test(p.name); }
-  function isActivity(p){ return /เดินเล่น/.test(p.name); }
+  // ปกติแต่ละจุดควรมี "category" ระบุมาจากข้อมูลทริปโดยตรง (food/activity/travel)
+  // เผื่อจุดไหนไม่มีค่านี้ ยังเดาจากชื่อได้เป็น fallback
+  function guessCategory(p){
+    if(/กินข้าว|คาเฟ่/.test(p.name)) return 'food';
+    if(/เดินเล่น/.test(p.name)) return 'activity';
+    return 'travel';
+  }
   function placeColor(p, dayIdx){
-    if(isRestaurant(p)) return RESTAURANT_COLOR;
-    if(isActivity(p)) return ACTIVITY_COLOR;
+    const cat = p.category || guessCategory(p);
+    if(cat === 'food') return RESTAURANT_COLOR;
+    if(cat === 'activity') return ACTIVITY_COLOR;
     return dayColor(dayIdx);
   }
   const app = document.getElementById('app');
