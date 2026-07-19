@@ -235,8 +235,14 @@ PAGE_TEMPLATE = r"""
 
   const PALETTE = ['#4F46E5','#F97316','#10B981','#EC4899','#0EA5E9','#EAB308'];
   const RESTAURANT_COLOR = '#EF4444';
+  const ACTIVITY_COLOR = '#EAB308';
   function isRestaurant(p){ return /กินข้าว/.test(p.name); }
-  function placeColor(p, dayIdx){ return isRestaurant(p) ? RESTAURANT_COLOR : dayColor(dayIdx); }
+  function isActivity(p){ return /เดินเล่น/.test(p.name); }
+  function placeColor(p, dayIdx){
+    if(isRestaurant(p)) return RESTAURANT_COLOR;
+    if(isActivity(p)) return ACTIVITY_COLOR;
+    return dayColor(dayIdx);
+  }
   const app = document.getElementById('app');
   const toastEl = document.getElementById('toast');
 
