@@ -196,12 +196,6 @@ PAGE_TEMPLATE = r"""
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   }
   .header-spacer{flex:1;}
-  .icon-btn{
-    background:var(--surface-2);color:var(--text);padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;
-    transition:background .15s ease, color .15s ease, transform .1s ease;
-  }
-  .icon-btn:hover{background:var(--accent-soft);color:var(--accent);}
-  .icon-btn:active{transform:scale(0.96);}
 
   .trip-body{display:grid;grid-template-columns:360px 1fr;gap:0;min-height:calc(100vh - 63px);}
   @media (max-width:860px){ .trip-body{grid-template-columns:1fr;} #map{height:360px !important;} }
@@ -235,18 +229,10 @@ PAGE_TEMPLATE = r"""
   .empty-state{text-align:center;padding:36px 12px;color:var(--text-muted);font-size:13.5px;}
 
   #map{height:calc(100vh - 63px);width:100%;}
-
-  .toast{
-    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);
-    padding:11px 20px;border-radius:999px;font-size:13px;font-weight:500;z-index:2000;opacity:0;pointer-events:none;
-    transition:opacity .25s ease; box-shadow:var(--shadow-md);
-  }
-  .toast.show{opacity:1;}
 </style>
 </head>
 <body>
 <div id="app"></div>
-<div id="toast" class="toast"></div>
 
 <script>
   let TRIP = {{ trip | tojson }};
@@ -268,12 +254,10 @@ PAGE_TEMPLATE = r"""
     return dayColor(dayIdx);
   }
   const app = document.getElementById('app');
-  const toastEl = document.getElementById('toast');
 
   let state = { trip: TRIP, selectedDayId: TRIP.days[0] ? TRIP.days[0].id : null,
                 map: null, markersLayer: null, routeLayer: null, markersById: {} };
 
-  function showToast(msg){ toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(()=> toastEl.classList.remove('show'), 1800); }
   function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
   function currentDay(){ return state.trip.days.find(d=>d.id===state.selectedDayId) || state.trip.days[0]; }
@@ -285,8 +269,6 @@ PAGE_TEMPLATE = r"""
       <div class="trip-header">
         <div class="trip-title-static">${escapeHtml(trip.name)}</div>
         <div class="header-spacer"></div>
-        <button class="icon-btn" id="btn-refresh">รีเฟรช</button>
-        <button class="icon-btn" id="btn-share">แชร์ลิงก์</button>
       </div>
       <div class="trip-body">
         <div class="side-panel">
@@ -296,11 +278,6 @@ PAGE_TEMPLATE = r"""
         </div>
         <div id="map"></div>
       </div>`;
-
-    document.getElementById('btn-refresh').onclick = ()=> location.reload();
-    document.getElementById('btn-share').onclick = ()=>{
-      navigator.clipboard.writeText(window.location.href).then(()=> showToast('คัดลอกลิงก์แล้ว ส่งให้คนอื่นดูได้เลย'));
-    };
 
     renderDayTabs(); renderDayFields(); renderPlaceList(); initMapIfNeeded(); updateMapMarkers();
   }
