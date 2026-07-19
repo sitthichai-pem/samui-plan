@@ -290,7 +290,7 @@ PAGE_TEMPLATE = r"""
     wrap.querySelectorAll('.day-tab').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         state.selectedDayId = btn.dataset.day;
-        renderDayFields(); renderPlaceList(); updateMapMarkers();
+        renderDayFields(); renderPlaceList(); updateMapMarkers(); fitMapToDay();
         wrap.querySelectorAll('.day-tab').forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
       });
@@ -346,11 +346,19 @@ PAGE_TEMPLATE = r"""
     }).addTo(state.map);
     state.markersLayer = L.layerGroup().addTo(state.map);
     state.routeLayer = L.layerGroup().addTo(state.map);
-    const allPlaces = state.trip.days.flatMap(d=>d.places);
-    if(allPlaces.length){
-      const bounds = L.latLngBounds(allPlaces.map(p=>[p.lat,p.lng]));
-      state.map.fitBounds(bounds, {padding:[40,40]});
-    }
+    fitMapToDay();
+  }
+
+  function fitMapToDay(){
+    if(!state.map) return;
+    const day = currentDay();
+    if(!day || day.places.length===0) return;
+    const bounds = L.latLngBounds(day.places.map(p=>[p.lat,p.lng]));
+    state.map.fitBounds(bounds, {padding:[40,40]});
+    // don't let the initial view zoom out further than this, even if stops are far apart
+    if(state.map.getZoom() < 8) state.map.setZoom(8);
+    // and don't zoom in past this just because a day has only one or two close stops
+    if(state.map.getZoom() > 15) state.map.setZoom(15);
   }
 
   function numberIcon(color, num){
