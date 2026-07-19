@@ -409,7 +409,11 @@ PAGE_TEMPLATE = r"""
     if(myRequestId !== routeRequestId) return; // a newer day/refresh started, drop this stale result
     legs.forEach(([a,b], i)=>{
       const dashed = isDirectLeg(a,b);
-      L.polyline(paths[i], {color, weight: dashed?3:4, opacity:0.85, dashArray: dashed?'6 8':null}).addTo(state.routeLayer);
+      const legColor = PALETTE[i % PALETTE.length];
+      // white casing underneath each leg so it stays readable over any map background,
+      // and each leg gets its own color so consecutive stops are easy to tell apart
+      L.polyline(paths[i], {color:'#ffffff', weight: dashed?6:8, opacity:0.9, lineCap:'round'}).addTo(state.routeLayer);
+      L.polyline(paths[i], {color:legColor, weight: dashed?3:4.5, opacity:0.95, dashArray: dashed?'6 8':null, lineCap:'round'}).addTo(state.routeLayer);
     });
   }
 
