@@ -194,7 +194,7 @@ PAGE_TEMPLATE = r"""
   .place-list{list-style:none;margin:0;padding:0;}
   .place-item{
     background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
-    padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow-sm);
+    padding:12px 14px;margin-bottom:10px;box-shadow:var(--shadow-sm);cursor:pointer;
     transition:box-shadow .15s ease, transform .15s ease;
   }
   .place-item:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
@@ -240,7 +240,7 @@ PAGE_TEMPLATE = r"""
   const toastEl = document.getElementById('toast');
 
   let state = { trip: TRIP, selectedDayId: TRIP.days[0] ? TRIP.days[0].id : null,
-                map: null, markersLayer: null, routeLayer: null };
+                map: null, markersLayer: null, routeLayer: null, markersById: {} };
 
   function showToast(msg){ toastEl.textContent = msg; toastEl.classList.add('show'); setTimeout(()=> toastEl.classList.remove('show'), 1800); }
   function escapeHtml(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -302,7 +302,7 @@ PAGE_TEMPLATE = r"""
       return;
     }
     list.innerHTML = day.places.map((p,i)=>`
-      <li class="place-item" style="border-left-color:${dayColor(state.trip.days.indexOf(day))}">
+      <li class="place-item" data-place="${p.id}" style="border-left-color:${dayColor(state.trip.days.indexOf(day))}">
         <div class="place-top">
           <div class="place-num" style="background:${dayColor(state.trip.days.indexOf(day))}">${i+1}</div>
           <div class="place-main">
@@ -312,6 +312,17 @@ PAGE_TEMPLATE = r"""
           </div>
         </div>
       </li>`).join('');
+    list.querySelectorAll('.place-item').forEach(li=>{
+      li.addEventListener('click', ()=> flyToPlace(li.dataset.place));
+    });
+  }
+
+  function flyToPlace(placeId){
+    const day = currentDay(); if(!day || !state.map) return;
+    const p = day.places.find(pl=>pl.id===placeId); if(!p) return;
+    state.map.flyTo([p.lat,p.lng], Math.max(state.map.getZoom(),15), {duration:0.6});
+    const marker = state.markersById[placeId];
+    if(marker) marker.openPopup();
   }
 
   function initMapIfNeeded(){
@@ -370,14 +381,16 @@ PAGE_TEMPLATE = r"""
     if(!state.map) return;
     const myRequestId = ++routeRequestId;
     state.markersLayer.clearLayers(); state.routeLayer.clearLayers();
+    state.markersById = {};
     const day = currentDay(); const dayIdx = day ? state.trip.days.indexOf(day) : 0; const color = dayColor(dayIdx);
     if(!day) return;
 
     day.places.forEach((p,i)=>{
       const side = i % 2 === 0 ? 'right' : 'left';
-      L.marker([p.lat,p.lng], {icon:labelIcon(color,i+1,p.name,p.time,side)})
+      const marker = L.marker([p.lat,p.lng], {icon:labelIcon(color,i+1,p.name,p.time,side)})
         .bindPopup(`<b>${escapeHtml(p.name)}</b>${p.time?`<br/>${escapeHtml(p.time)} น.`:''}${p.note?`<br/>${escapeHtml(p.note)}`:''}`)
         .addTo(state.markersLayer);
+      state.markersById[p.id] = marker;
     });
 
     const legs = [];
