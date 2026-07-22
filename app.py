@@ -154,6 +154,38 @@ DEFAULT_TRIP = {
                     "time": "10:30",
                     "note": "",
                     "category": "food"
+                },
+                {
+                    "id": "p19",
+                    "name": "จุดชมวิว Overlap Stone 2",
+                    "lat": 9.4631624, "lng": 100.0286327,
+                    "time": "11:00",
+                    "note": "",
+                    "category": "activity"
+                },
+                {
+                    "id": "p20",
+                    "name": "กินข้าวที่ร้านหมูชมพู",
+                    "lat": 9.472838, "lng": 99.9508295,
+                    "time": "12:30",
+                    "note": "มื้อกลางวัน",
+                    "category": "food"
+                },
+                {
+                    "id": "p21",
+                    "name": "หาดลิปะน้อย",
+                    "lat": 9.5051365, "lng": 99.9234084,
+                    "time": "13:30",
+                    "note": "",
+                    "category": "activity"
+                },
+                {
+                    "id": "p22",
+                    "name": "คาเฟ่ Chill Inn Hostel and Beach Cafe",
+                    "lat": 9.4955011, "lng": 99.9229827,
+                    "time": "14:00",
+                    "note": "",
+                    "category": "food"
                 }
             ]
         },
