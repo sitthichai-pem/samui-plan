@@ -102,7 +102,61 @@ DEFAULT_TRIP = {
                 }
             ]
         },
-        {"id": "d2", "label": "วันที่ 2", "date": "2026-07-26", "places": []},
+        {
+            "id": "d2",
+            "label": "วันที่ 2",
+            "date": "2026-07-26",
+            "places": [
+                {
+                    "id": "p13",
+                    "name": "ร้านติ่มซำไก่ทอด",
+                    "lat": 9.5241867, "lng": 100.0371674,
+                    "time": "07:00",
+                    "note": "มื้อเช้า ออกจาก COSI Samui Chaweng Beach",
+                    "category": "food"
+                },
+                {
+                    "id": "p14",
+                    "name": "เดินเล่นหาดเฉวง",
+                    "lat": 9.519245, "lng": 100.052729,
+                    "time": "08:00",
+                    "note": "",
+                    "category": "activity"
+                },
+                {
+                    "id": "p15",
+                    "name": "จุดชมวิวลาดเกาะ",
+                    "lat": 9.4990108, "lng": 100.0574056,
+                    "time": "09:00",
+                    "note": "",
+                    "category": "activity"
+                },
+                {
+                    "id": "p16",
+                    "name": "คริสตัล บีช",
+                    "lat": 9.4777353, "lng": 100.0670935,
+                    "time": "09:30",
+                    "note": "",
+                    "category": "activity"
+                },
+                {
+                    "id": "p17",
+                    "name": "หินตา หินยาย",
+                    "lat": 9.4633422, "lng": 100.0361526,
+                    "time": "10:00",
+                    "note": "",
+                    "category": "activity"
+                },
+                {
+                    "id": "p18",
+                    "name": "กินขนมที่ Lolamui Café",
+                    "lat": 9.4608005, "lng": 100.0373499,
+                    "time": "10:30",
+                    "note": "",
+                    "category": "food"
+                }
+            ]
+        },
         {"id": "d3", "label": "วันที่ 3", "date": "2026-07-27", "places": []},
         {
             "id": "d4",
