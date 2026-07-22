@@ -186,6 +186,22 @@ DEFAULT_TRIP = {
                     "time": "14:00",
                     "note": "",
                     "category": "food"
+                },
+                {
+                    "id": "p23",
+                    "name": "กินข้าวมันทะเล ป้าตา เกาะสมุย",
+                    "lat": 9.5362255, "lng": 99.932044,
+                    "time": "15:00",
+                    "note": "",
+                    "category": "food"
+                },
+                {
+                    "id": "p24",
+                    "name": "กลับโรงแรม COSI Samui Chaweng Beach",
+                    "lat": 9.5311554, "lng": 100.0578517,
+                    "time": "16:00",
+                    "note": "รอเดินเล่นหาดเฉวงตอนเย็น",
+                    "category": "travel"
                 }
             ]
         },
