@@ -108,18 +108,10 @@ DEFAULT_TRIP = {
             "date": "2026-07-26",
             "places": [
                 {
-                    "id": "p13",
-                    "name": "ร้านติ่มซำไก่ทอด",
-                    "lat": 9.5241867, "lng": 100.0371674,
-                    "time": "07:00",
-                    "note": "มื้อเช้า ออกจาก COSI Samui Chaweng Beach",
-                    "category": "food"
-                },
-                {
                     "id": "p14",
                     "name": "เดินเล่นหาดเฉวง",
                     "lat": 9.519245, "lng": 100.052729,
-                    "time": "08:00",
+                    "time": "07:00",
                     "note": "",
                     "category": "activity"
                 },
@@ -127,7 +119,7 @@ DEFAULT_TRIP = {
                     "id": "p15",
                     "name": "จุดชมวิวลาดเกาะ",
                     "lat": 9.4990108, "lng": 100.0574056,
-                    "time": "09:00",
+                    "time": "08:00",
                     "note": "",
                     "category": "activity"
                 },
@@ -135,7 +127,7 @@ DEFAULT_TRIP = {
                     "id": "p16",
                     "name": "คริสตัล บีช",
                     "lat": 9.4777353, "lng": 100.0670935,
-                    "time": "09:30",
+                    "time": "08:30",
                     "note": "",
                     "category": "activity"
                 },
@@ -143,9 +135,17 @@ DEFAULT_TRIP = {
                     "id": "p17",
                     "name": "หินตา หินยาย",
                     "lat": 9.4633422, "lng": 100.0361526,
-                    "time": "10:00",
+                    "time": "09:00",
                     "note": "",
                     "category": "activity"
+                },
+                {
+                    "id": "p26",
+                    "name": "กินข้าวร้านครัวชาวบ้าน",
+                    "lat": 9.4555737, "lng": 100.0258679,
+                    "time": "10:00",
+                    "note": "",
+                    "category": "food"
                 },
                 {
                     "id": "p18",
