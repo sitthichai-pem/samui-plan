@@ -261,7 +261,7 @@ DEFAULT_TRIP = {
                     "id": "p4",
                     "name": "เช็คเอาต์ COSI Samui Chaweng Beach",
                     "lat": 9.5311554, "lng": 100.0578517,
-                    "time": "12:00",
+                    "time": "09:00",
                     "note": "",
                     "category": "travel"
                 },
