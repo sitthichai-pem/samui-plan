@@ -229,7 +229,7 @@ DEFAULT_TRIP = {
                 {
                     "id": "p29",
                     "name": "น้ำตกหินลาด",
-                    "lat": 9.5489448, "lng": 99.8896545,
+                    "lat": 9.5207096, "lng": 99.9650981,
                     "time": "10:00",
                     "note": "",
                     "category": "activity"
